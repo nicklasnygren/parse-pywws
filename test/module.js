@@ -1,4 +1,4 @@
-import * as _module from '..';
+import * as _module from '../src';
 import test from 'tape';
 
 test('Module exports', assert => {

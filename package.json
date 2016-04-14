@@ -2,11 +2,12 @@
   "name": "pywws-parse",
   "version": "0.0.1",
   "description": "Pywws data file parser for node.js",
-  "main": "dist/main.js",
+  "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && mkdir dist && browserify --node -t babelify -u 'node_modules/**/*' index.js -o dist/main.js",
-    "test": "browserify --node -t babelify test/*.js | node",
-    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test",
+    "build": "rm -rf dist && mkdir dist && browserify --node -t babelify --no-bundle-external --standalone 'pywws-parse' src/index.js | uglifyjs -c > dist/main.js",
+    "tap": "browserify --node -t babelify --no-bundle-external test/*.js | node",
+    "test": "npm run tap | faucet",
+    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run tap",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -39,6 +40,7 @@
     "faucet": "0.0.1",
     "moment": "^2.12.0",
     "nodemon": "^1.9.1",
-    "tape": "^4.5.1"
+    "tape": "^4.5.1",
+    "uglifyjs": "^2.4.10"
   }
 }
