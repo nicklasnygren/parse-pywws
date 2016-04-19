@@ -122,43 +122,27 @@ export default class Parser {
    * @param {Array} columns
    */
   async getOne(root, date, before, columns) {
-    const getDateFilename = d => this.getFilenameForDate(d.toISOString().split('T')[0]);
+    const _this = this;
+    const getDateFilename = d => this.getFilenameForDate(d);
     const dateTimeFilter = getDateTimeFilter(date, before);
+    let filename;
 
-    date = new Date(+date);
-    let filename = resolve(root, getDateFilename(date));
-    let fileExists;
-
-    try {
-      fileExists = await fs.statAsync(filename);
-    }
-
-    // We did not get a result on our first try. That means that the start date we selected is
-    // before the first PYWWS record. We'll try looping dates until we reach a file that exists.
-    //
-    // FIXME: This is very unlikely to be the most performant way to do it.
-    //
-    catch (err) {
-      let maxDate = (new Date()).setDate((new Date()).getDate() + 1);
-
-      do {
-        date.setDate(date.getDate() + 1);
-        filename = resolve(root, getDateFilename(date));
-
+    await Promise.coroutine(function *() {
+      let _filename;
+      for (const date of dateRange(new Date(+date), new Date())) {
+        _filename = resolve(root, getDateFilename(date));
         try {
-          fileExists = await fs.statAsync(filename);
-
-          if (fileExists) {
-            break;
-          }
+          yield fs.statAsync(_filename);
+          filename = _filename;
+          break;
         }
         catch (err) {
-          //
+          // File does not exist. Iterate date and try again.
         }
-      } while (date <= maxDate);
-    }
+      }
+    })();
 
-    if (fileExists) {
+    if (filename) {
       const csv = await this.getCSV(filename);
       let data;
       
