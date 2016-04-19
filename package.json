@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nicklasnygren/parse-pywws.git"
+    "url": "git+https://github.com/nicklasnygren/pywws-parse.git"
   },
   "keywords": [
     "pywws",
@@ -25,9 +25,9 @@
   "author": "Nicklas Nygren",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nicklasnygren/parse-pywws/issues"
+    "url": "https://github.com/nicklasnygren/pywws-parse/issues"
   },
-  "homepage": "https://github.com/nicklasnygren/parse-pywws#readme",
+  "homepage": "https://github.com/nicklasnygren/pywws-parse#readme",
   "dependencies": {
     "babel-polyfill": "^6.7.4",
     "bluebird": "^3.3.5",
