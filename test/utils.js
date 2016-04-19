@@ -1,5 +1,5 @@
 import test from 'tape';
-import { dateRange, intRange } from '../src/utils';
+import { dateRange, intRange, unique } from '../src/utils';
 import moment from 'moment';
 
 test('Date range', assert => {
@@ -36,4 +36,16 @@ test('Int range', assert => {
     , `Returns range of ints`);
   
   assert.end();
+});
+
+test('Unique', t => {
+
+  t.deepEqual(
+    Array.from(unique([1, 1, 2, 3, 2, 3, 4, 'foo', 'foo', 'bar'][Symbol.iterator]())),
+    [1, 2, 3 ,4, 'foo', 'bar'],
+    `Utils.unique gets unique values from an iterator`
+  );
+  
+  
+  t.end();
 });
