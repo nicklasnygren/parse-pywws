@@ -95,10 +95,10 @@ export default class Parser {
     const data = [];
 
     await Promise.coroutine(function *() {
-      for (let filename of _this.getFilenameRange(start, end)) {
+      for (const filename of _this.getFilenameRange(start, end)) {
         const csvData = yield _this.getCSV(resolve(root, filename));
 
-        for (let item of csvData[Symbol.iterator]()) {
+        for (const item of csvData[Symbol.iterator]()) {
 
           if (item && item.length) {
             const date = new Date(item[0]);
