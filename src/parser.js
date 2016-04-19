@@ -91,27 +91,27 @@ export default class Parser {
    * Get all CSV contents from the specified date range, map array into objects
    */
   async get(root, start, end, columns = this.columns) {
-    const csvData = await Array.from(this.getFilenameRange(start, end))
-      .reduce(async (values, name) => {
+    const _this = this;
+    const data = [];
 
-        values = await values;
-        const csv = await this.getCSV(resolve(root, name));
-    
-        if (csv && csv.length) {
-          const date = new Date(csv[0])
-    
-          // Verify that the date is actually withing the date range before adding it. Maybe a
-          // partial days was provided in the arguments.
-          if (date => start && date <= end) {
-            return [...values, ...csv];
+    await Promise.coroutine(function *() {
+      for (let filename of _this.getFilenameRange(start, end)) {
+        const csvData = yield _this.getCSV(resolve(root, filename));
+
+        for (let item of csvData[Symbol.iterator]()) {
+
+          if (item && item.length) {
+            const date = new Date(item[0]);
+
+            if (date => start && date <= end) {
+              data.push(_this.objectFactory(item, columns));
+            }
           }
         }
-    
-        return values;
-      }, []);
+      }
+    })();
 
-    // Map the returned arrays to their corresponding column names
-    return csvData.map(data => this.objectFactory(data, columns));
+    return data;
   }
 
   /**
