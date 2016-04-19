@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import test from 'tape';
 import Parser from '../src/parser';
 import { raw } from '../src/datasets';
