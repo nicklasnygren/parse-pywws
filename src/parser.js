@@ -166,25 +166,23 @@ export default class Parser {
    * @function getFirst
    */
   async getFirst(root, ...params) {
-    const range = Array.from(intRange(1990, (new Date()).getFullYear()));
-    let year;
+    const _this = this;
+    let res = null;
 
-    for (let i = 0; i < range.length; i++) {
-      try {
-        await fs.statAsync(resolve(root, `${this.type}/${range[i]}`));
-        year = range[i];
-        break;
+    await Promise.coroutine(function * () {
+      for (const year of intRange(1990, (new Date()).getFullYear())) {
+        try {
+          yield fs.statAsync(resolve(root, `${_this.type}/${year}`));
+          res = yield _this.getOne(root, new Date(year + '-01-01 00:00:00'), false, ...params);
+          break;
+        }
+        catch (err) {
+          // Year not found, continue trying on next one
+        }
       }
-      catch (err) {
-        // Year not found, continue trying on next one
-      }
-    }
+    })();
 
-    if (year) {
-      return this.getOne(root, new Date(year + '-01-01 00:00:00'), false, ...params);
-    }
-
-    return null;
+    return res;
   }
 
   /**
