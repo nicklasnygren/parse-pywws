@@ -52,10 +52,15 @@ export default class Parser {
    * @param {Date} start
    * @param {Date} end
    */
-  getFilenameRange(start, end) {
-    return dateRange(start, end)
-      .map(date => this.getFilenameForDate(date))
-      .filter(uniq);
+  * getFilenameRange(start, end) {
+    const usedDates = new Set();
+    for (let date of dateRange(start, end)) {
+      date = this.getFilenameForDate(date);
+      if (!usedDates.has(date)) {
+        usedDates.add(date);
+        yield date;
+      }
+    }
   }
 
   /**
@@ -86,7 +91,7 @@ export default class Parser {
    * Get all CSV contents from the specified date range, map array into objects
    */
   async get(root, start, end, columns = this.columns) {
-    const csvData = await this.getFilenameRange(start, end)
+    const csvData = await Array.from(this.getFilenameRange(start, end))
       .reduce(async (values, name) => {
 
         values = await values;
@@ -177,9 +182,7 @@ export default class Parser {
    * @function getFirst
    */
   async getFirst(root, ...params) {
-    const range = dateRange(1990, (new Date()).getFullYear())
-      .map(date => date.split('-')[0]).filter(uniq);
-
+    const range = Array.from(intRange(1990, (new Date()).getFullYear()));
     let year;
 
     for (let i = 0; i < range.length; i++) {

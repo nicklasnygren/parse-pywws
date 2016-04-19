@@ -22,7 +22,7 @@ test('Parser', assert => {
 test('Parser.getCSV', async assert => {
   const d1 = new Date('2014-12-03');
   const d2 = new Date('2014-12-03');
-  const filenames = raw.getFilenameRange(d1, d2);
+  const filenames = Array.from(raw.getFilenameRange(d1, d2));
   const file = resolve(FIXTURES, filenames[0]);
   const res = await raw.getCSV(file);
 
