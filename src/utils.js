@@ -25,11 +25,19 @@ export function * dateRange(start, end) {
   while (curDate <= endDate);
 }
 
-// Get a range of ints starting at min and ending at max
-//
 export function * intRange(min, max) {
   for (let i = min; i < max + 1; i++) {
     yield i;
+  }
+}
+
+export function * unique(iterable) {
+  const set = new Set();
+  for (const i of iterable) {
+    if (!set.has(i)) {
+      set.add(i);
+      yield i;
+    }
   }
 }
 

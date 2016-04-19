@@ -1,6 +1,6 @@
 import iniparser from 'iniparser';
 import csv from 'csv';
-import { dateRange, intRange, getDateTimeFilter } from './utils';
+import { dateRange, intRange, unique, getDateTimeFilter } from './utils';
 import _fs from 'fs';
 import Promise from 'bluebird';
 import { resolve } from 'path';
@@ -53,13 +53,18 @@ export default class Parser {
    * @param {Date} end
    */
   * getFilenameRange(start, end) {
-    const usedDates = new Set();
-    for (let date of dateRange(start, end)) {
-      date = this.getFilenameForDate(date);
-      if (!usedDates.has(date)) {
-        usedDates.add(date);
-        yield date;
-      }
+    for (const filename of unique(this.getDateFilenames(dateRange(start, end)))) {
+      yield filename;
+    }
+  }
+
+  /**
+   * @function getDateFilenames
+   * @param {Iterable} dates
+   */
+  * getDateFilenames(dates) {
+    for (const date of dates) {
+      yield this.getFilenameForDate(date);
     }
   }
 
