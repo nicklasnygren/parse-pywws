@@ -123,14 +123,13 @@ export default class Parser {
    */
   async getOne(root, date, before, columns) {
     const _this = this;
-    const getDateFilename = d => this.getFilenameForDate(d);
     const dateTimeFilter = getDateTimeFilter(date, before);
     let filename;
 
     await Promise.coroutine(function *() {
       let _filename;
       for (const date of dateRange(new Date(+date), new Date())) {
-        _filename = resolve(root, getDateFilename(date));
+        _filename = resolve(root, _this.getFilenameForDate(date));
         try {
           yield fs.statAsync(_filename);
           filename = _filename;
