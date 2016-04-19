@@ -8,7 +8,6 @@ import { resolve } from 'path';
 const fs = Promise.promisifyAll(_fs);
 const parseCSV = Promise.promisify(csv.parse);
 const parseINI = Promise.promisify(iniparser.parse);
-const uniq = (val, idx, arr) => arr.indexOf(val) === idx;
 
 /**
  * @class PywwsDataset
