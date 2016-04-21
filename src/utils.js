@@ -12,23 +12,8 @@ export function parseDate(date) {
   }
 }
 
-export function * dateRange(start, end) {
-  const startDate = parseDate(start);
-  const endDate = parseDate(end);
-  let n = -1;
-  let curDate;
-
-  do {
-    curDate = new Date(+startDate + (++n * 24 * 60 * 60 * 1000));
-    yield curDate.toISOString().split('T')[0];
-  }
-  while (curDate <= endDate);
-}
-
-export function * intRange(min, max) {
-  for (let i = min; i < max + 1; i++) {
-    yield i;
-  }
+export function formatDate(date) {
+  return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
 }
 
 export function * unique(iterable) {

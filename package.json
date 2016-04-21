@@ -32,7 +32,8 @@
     "babel-polyfill": "^6.7.4",
     "bluebird": "^3.3.5",
     "csv": "^0.4.6",
-    "iniparser": "^1.0.5"
+    "iniparser": "^1.0.5",
+    "iter": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",

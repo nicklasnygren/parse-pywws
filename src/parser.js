@@ -1,6 +1,7 @@
 import iniparser from 'iniparser';
 import csv from 'csv';
-import { dateRange, intRange, unique, getDateTimeFilter } from './utils';
+import { map, getArray, dateRange, intRange } from 'iter';
+import { formatDate, unique, getDateTimeFilter } from './utils';
 import _fs from 'fs';
 import Promise from 'bluebird';
 import { resolve } from 'path';
@@ -52,18 +53,13 @@ export default class Parser {
    * @param {Date} end
    */
   * getFilenameRange(start, end) {
-    for (const filename of unique(this.getDateFilenames(dateRange(start, end)))) {
-      yield filename;
-    }
-  }
+    const iterator = unique(
+      map(dateString => this.getFilenameForDate(dateString),
+          map(formatDate,
+              dateRange(start, end))));
 
-  /**
-   * @function getDateFilenames
-   * @param {Iterable} dates
-   */
-  * getDateFilenames(dates) {
-    for (const date of dates) {
-      yield this.getFilenameForDate(date);
+    for (const filename of iterator) {
+      yield filename;
     }
   }
 
@@ -132,7 +128,7 @@ export default class Parser {
 
     await Promise.coroutine(function *() {
       let _filename;
-      for (const date of dateRange(new Date(+date), new Date())) {
+      for (const date of map(formatDate, dateRange(new Date(+date), new Date()))) {
         _filename = resolve(root, _this.getFilenameForDate(date));
         try {
           yield fs.statAsync(_filename);
