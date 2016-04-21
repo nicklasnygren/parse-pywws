@@ -1,6 +1,6 @@
 {
   "name": "pywws-parse",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Pywws data file parser for node.js",
   "main": "index.js",
   "scripts": {
