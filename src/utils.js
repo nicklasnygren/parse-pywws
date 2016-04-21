@@ -16,16 +16,6 @@ export function formatDate(date) {
   return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
 }
 
-export function * unique(iterable) {
-  const set = new Set();
-  for (const i of iterable) {
-    if (!set.has(i)) {
-      set.add(i);
-      yield i;
-    }
-  }
-}
-
 export function getDateTimeFilter(date, before) {
   return item => {
     const timestamp = new Date(item[0]);
